@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Admin — {{ user.username }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>{{ user.username }}</h1><p>{% if user.is_admin %}Administrator{% else %}Standard user{% endif %} · joined {{ user.created_at.strftime('%d %b %Y') }}</p></div>
+  <a href="{{ url_for('admin.users') }}" class="btn btn-secondary">← Back to users</a>
+</div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-number">{{ scans|length }}</div><div class="stat-label">Cards scanned</div></div>
+</div>
+{% if scans %}
+<table class="data-table">
+  <thead><tr><th>Card</th><th>Type</th><th>Rarity</th><th>Scanned at</th></tr></thead>
+  <tbody>
+  {% for s in scans %}
+    <tr><td><strong>{{ s.card.name }}</strong></td><td>{{ s.card.card_type or '—' }}</td><td>{{ s.card.rarity or '—' }}</td><td class="log-meta">{{ s.scanned_at.strftime('%d %b %Y, %H:%M') }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p style="color: var(--gray-400); font-size: 0.875rem;">This user hasn't scanned any cards yet.</p>
+{% endif %}
+{% endblock %}

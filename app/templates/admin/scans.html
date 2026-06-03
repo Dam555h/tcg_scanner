@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Admin — Scan Logs{% endblock %}
+{% block content %}
+<div class="page-header"><div><h1>Scan Logs</h1><p>Last 200 scans across all users</p></div></div>
+<div class="admin-tabs">
+  <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+  <a href="{{ url_for('admin.users') }}">Users</a>
+  <a href="{{ url_for('admin.cards') }}">Cards</a>
+  <a href="{{ url_for('admin.scans') }}" class="active">Scan Logs</a>
+</div>
+{% if scans %}
+<table class="data-table">
+  <thead><tr><th>User</th><th>Card</th><th>Rarity</th><th>Time</th></tr></thead>
+  <tbody>
+  {% for s in scans %}
+    <tr><td><strong>{{ s.user.username }}</strong></td><td>{{ s.card.name }}</td><td>{{ s.card.rarity or '—' }}</td><td class="log-meta">{{ s.scanned_at.strftime('%d %b %Y, %H:%M') }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p style="color: var(--gray-400); font-size: 0.875rem;">No scans recorded yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Admin — {{ 'Edit' if card else 'Add' }} Card{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>{{ 'Edit card' if card else 'Add card' }}</h1><p>{{ 'Update card details' if card else 'Add a new card to the database' }}</p></div>
+  <a href="{{ url_for('admin.cards') }}" class="btn btn-secondary">← Back</a>
+</div>
+<div style="max-width: 560px;">
+  <form method="POST">
+    <div class="form-group">
+      <label for="name">Card name</label>
+      <input type="text" id="name" name="name" value="{{ card.name if card else '' }}" required>
+    </div>
+    <div class="form-group">
+      <label for="ml_class_name">ML class name</label>
+      <input type="text" id="ml_class_name" name="ml_class_name" value="{{ card.ml_class_name if card else '' }}" required>
+      <p class="form-hint">Must match the Teachable Machine class label EXACTLY (case-sensitive).</p>
+    </div>
+    <div class="form-group">
+      <label for="card_type">Type</label>
+      <input type="text" id="card_type" name="card_type" value="{{ card.card_type if card else '' }}" placeholder="e.g. Creature, Artifact, Enchantment">
+    </div>
+    <div class="form-group">
+      <label for="rarity">Rarity</label>
+      <select id="rarity" name="rarity">
+        {% set current = card.rarity if card else '' %}
+        <option value="" {% if current == '' %}selected{% endif %}>— none —</option>
+        <option value="Common" {% if current == 'Common' %}selected{% endif %}>Common</option>
+        <option value="Uncommon" {% if current == 'Uncommon' %}selected{% endif %}>Uncommon</option>
+        <option value="Rare" {% if current == 'Rare' %}selected{% endif %}>Rare</option>
+        <option value="Mythic" {% if current == 'Mythic' %}selected{% endif %}>Mythic</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="image_url">Image URL</label>
+      <input type="text" id="image_url" name="image_url" value="{{ card.image_url if card else '' }}" placeholder="https://...">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="3">{{ card.description if card else '' }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg">{{ 'Save changes' if card else 'Add card' }}</button>
+  </form>
+</div>
+{% endblock %}

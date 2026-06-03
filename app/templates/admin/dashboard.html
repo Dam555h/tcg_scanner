@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Admin — Dashboard{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div><h1>Admin Dashboard</h1><p>Overview of the whole system</p></div>
+</div>
+
+<div class="admin-tabs">
+  <a href="{{ url_for('admin.dashboard') }}" class="active">Dashboard</a>
+  <a href="{{ url_for('admin.users') }}">Users</a>
+  <a href="{{ url_for('admin.cards') }}">Cards</a>
+  <a href="{{ url_for('admin.scans') }}">Scan Logs</a>
+</div>
+
+<div class="dash-grid">
+  <div class="dash-stat"><div class="num">{{ total_users }}</div><div class="label">Total users</div></div>
+  <div class="dash-stat"><div class="num">{{ total_cards }}</div><div class="label">Cards in database</div></div>
+  <div class="dash-stat"><div class="num">{{ total_scans }}</div><div class="label">Total scans</div></div>
+</div>
+
+<div class="dash-section">
+  <h2>Most scanned cards</h2>
+  {% if top_cards %}
+    {% for name, count in top_cards %}
+      <div class="bar-row">
+        <div class="bar-label">{{ name }}</div>
+        <div class="bar-track"><div class="bar-fill" style="width: {{ (count / max_count * 100) | round }}%"></div></div>
+        <div class="bar-count">{{ count }}</div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p style="color: var(--gray-400); font-size: 0.875rem;">No scans recorded yet.</p>
+  {% endif %}
+</div>
+
+<div class="dash-section">
+  <h2>Recent activity</h2>
+  {% if recent_scans %}
+    {% for s in recent_scans %}
+      <div class="log-item">
+        <span><strong>{{ s.user.username }}</strong> scanned <strong>{{ s.card.name }}</strong></span>
+        <span class="log-meta">{{ s.scanned_at.strftime('%d %b %Y, %H:%M') }}</span>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p style="color: var(--gray-400); font-size: 0.875rem;">No activity yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

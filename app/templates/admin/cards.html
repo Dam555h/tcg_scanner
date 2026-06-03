@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Admin — Cards{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div><h1>Cards</h1><p>Manage the card database</p></div>
+  <a href="{{ url_for('admin.new_card') }}" class="btn btn-primary">+ Add card</a>
+</div>
+<div class="admin-tabs">
+  <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+  <a href="{{ url_for('admin.users') }}">Users</a>
+  <a href="{{ url_for('admin.cards') }}" class="active">Cards</a>
+  <a href="{{ url_for('admin.scans') }}">Scan Logs</a>
+</div>
+{% if cards %}
+<table class="data-table">
+  <thead><tr><th>Name</th><th>ML Class</th><th>Type</th><th>Rarity</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for c in cards %}
+    <tr>
+      <td><strong>{{ c.name }}</strong></td>
+      <td><span class="meta-tag">{{ c.ml_class_name }}</span></td>
+      <td>{{ c.card_type or '—' }}</td>
+      <td>{{ c.rarity or '—' }}</td>
+      <td>
+        <div class="table-actions">
+          <a href="{{ url_for('admin.edit_card', card_id=c.id) }}" class="btn btn-secondary btn-sm">Edit</a>
+          <form class="inline-form" method="POST" action="{{ url_for('admin.delete_card', card_id=c.id) }}" onsubmit="return confirm('Delete {{ c.name }}?');">
+            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state"><div class="empty-state-icon">🃏</div><h2>No cards yet</h2><p>Add your first card to the database</p><a href="{{ url_for('admin.new_card') }}" class="btn btn-primary">Add card</a></div>
+{% endif %}
+{% endblock %}

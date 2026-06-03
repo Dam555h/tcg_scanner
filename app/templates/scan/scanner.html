@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Scan — TCG Scanner{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>Card Scanner</h1>
+    <p>Point your camera at a card and tap scan</p>
+  </div>
+  <a href="{{ url_for('library.library') }}" class="btn btn-secondary">View Library →</a>
+</div>
+
+<div class="scanner-layout">
+  <div class="scanner-panel">
+    <div class="scanner-panel-header"><span class="panel-icon">📷</span><h2>Camera</h2></div>
+    <div class="camera-viewport" id="camera-viewport">
+      <video id="webcam" autoplay playsinline></video>
+    </div>
+    <div class="camera-error-box" id="camera-error">
+      <div style="font-size:2rem; opacity:.3">📷</div>
+      <p>Camera unavailable<br>Use file upload below</p>
+    </div>
+    <div class="scanner-actions">
+      <button id="btn-scan" class="btn btn-primary btn-lg" disabled>Scan Card</button>
+      <div class="divider-text">or</div>
+      <label class="upload-label" for="file-upload">📁 Upload image</label>
+      <input type="file" id="file-upload" accept="image/*" style="display:none;">
+    </div>
+  </div>
+
+  <div class="scanner-panel">
+    <div class="scanner-panel-header"><span class="panel-icon">✦</span><h2>Result</h2></div>
+    <div class="result-empty" id="result-empty">
+      <div class="result-empty-icon">🃏</div>
+      <p>Scan a card to see its details</p>
+    </div>
+    <div class="result-loading" id="result-loading">
+      <div class="spinner"></div>
+      <p style="font-size:.8rem; color: var(--gray-500);">Identifying card…</p>
+    </div>
+    <div class="result-card" id="result-card">
+      <div class="result-content">
+        <div class="result-badge success">✓ Identified</div>
+        <div class="result-card-name" id="result-name"></div>
+        <div class="result-meta" id="result-meta"></div>
+        <div class="result-description" id="result-desc"></div>
+        <div id="result-owned-badge" class="result-badge owned" style="display:none; margin-bottom:1rem;">Already in your library</div>
+        <a href="{{ url_for('library.library') }}" class="btn btn-secondary btn-sm">View Library</a>
+      </div>
+    </div>
+    <div class="result-card" id="result-error">
+      <div class="result-content">
+        <div class="result-badge error">✕ Not recognised</div>
+        <div class="result-error-msg" id="result-error-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<canvas id="snapshot" style="display:none;"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script src="{{ url_for('static', filename='js/scanner.js') }}"></script>
+{% endblock %}

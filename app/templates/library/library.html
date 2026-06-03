@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}My Library — TCG Scanner{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>My Library</h1>
+    <p>Cards you've scanned and collected</p>
+  </div>
+  <a href="{{ url_for('scan.scanner') }}" class="btn btn-primary">+ Scan a card</a>
+</div>
+
+{% if user_cards %}
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-number">{{ user_cards|length }}</div>
+      <div class="stat-label">Cards collected</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ user_cards|length }}/{{ total_cards }}</div>
+      <div class="stat-label">Collection progress</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ user_cards[0].scanned_at.strftime('%d %b') }}</div>
+      <div class="stat-label">Last scanned</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    {% for uc in user_cards %}
+      {% set rarity_class = (uc.card.rarity or 'common') | lower %}
+      <div class="card-tile">
+        <div class="card-tile-image">
+          {% if uc.card.image_url %}
+            <img src="{{ uc.card.image_url }}" alt="{{ uc.card.name }}">
+          {% else %}
+            <div class="card-tile-placeholder">🃏</div>
+          {% endif %}
+        </div>
+        <div class="card-tile-body">
+          <div class="card-tile-name">{{ uc.card.name }}</div>
+          <div class="card-tile-type">{{ uc.card.card_type or 'Unknown' }}</div>
+        </div>
+        <div class="card-tile-footer">
+          <span class="rarity-dot {{ rarity_class }}" title="{{ uc.card.rarity }}"></span>
+          <span class="card-tile-date">{{ uc.scanned_at.strftime('%d %b %Y') }}</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">🃏</div>
+    <h2>No cards yet</h2>
+    <p>Scan your first card to start your collection</p>
+    <a href="{{ url_for('scan.scanner') }}" class="btn btn-primary">Go to scanner</a>
+  </div>
+{% endif %}
+{% endblock %}
