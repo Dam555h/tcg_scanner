@@ -57,25 +57,3 @@ Regal Bunnicorn · Sol Ring · Warren Warleader · Nothing (background)
 7. Upload your model files into `app/static/my_model/`
 8. Reload. HTTPS is automatic (required for camera access).
 
-## Project structure
-```
-tcg_scanner/
-├── run.py
-├── seed.py
-├── requirements.txt
-└── app/
-    ├── __init__.py          # app factory, registers blueprints
-    ├── models.py            # User, Card, UserCard
-    ├── blueprints/
-    │   ├── auth/            # login, register, logout
-    │   ├── scan/            # camera + /scan/predict
-    │   ├── library/         # personal collection
-    │   └── admin/           # dashboard, users, cards, scans
-    ├── templates/
-    │   ├── base.html
-    │   ├── auth/  scan/  library/  admin/
-    └── static/
-        ├── css/style.css
-        ├── js/scanner.js
-        └── my_model/        # ← your Teachable Machine export
-```
