@@ -1,4 +1,0 @@
-Put your Teachable Machine TensorFlow.js export here:
-  - model.json
-  - metadata.json
-  - weights.bin
